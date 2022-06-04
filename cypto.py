@@ -17,7 +17,10 @@ data = {
     "sw":True,
     "first":True,
     "symbol":"ETHBUSD",
-    "back_price": np.array([])
+    "symbol_play": "ETH",
+    "back_price": np.array([]),
+    "price_play":15,
+    "fee": 0.004
 }
 client = Client(api_key, api_secret)
 dict_data = {'error':False}
@@ -83,8 +86,10 @@ def btc_trade_history(msg):
                     # print("percent sell:",percent_sell)
                     if percent_sell > 0.12 and msg['c'] > data['sell']:
                         # sell
-                        order_sell = client.order_market_sell(symbol=data['symbol'],quantity=100)
-                        print('order_sell:',order_sell)
+                        sell_price = client.get_asset_balance(asset=data['symbol_play']).get('free')
+                        print('sell price',round(float(sell_price),4))
+                        order_sell = client.order_market_sell(symbol=data['symbol'],quantity=round(float(sell_price),4))
+                        # print('order_sell:',order_sell)
                         data["price_sell"].append(msg['c'])
                         # save price sell
                         data['price'] = msg['c']
@@ -97,8 +102,11 @@ def btc_trade_history(msg):
                         min_sell_acc = min(data["price"],msg['c'])
                         percent_sell_acc = ((max_sell_acc-min_sell_acc)/min_sell_acc)*100
                         if percent_sell_acc >=0.001 and msg['c'] > data['sell'] and std < 0.51:
-                            order_sell = client.order_market_sell(symbol=data['symbol'],quantity=100)
-                            print('order_sell:',order_sell)
+                            # sell_price = data["earn_coin"]+round((msg['c'] -  data['price_buy'][-1]),2)
+                            sell_price = client.get_asset_balance(asset=data['symbol_play']).get('free')
+                            print('sell price',round(float(sell_price),4))
+                            order_sell = client.order_market_sell(symbol=data['symbol'],quantity=round(float(sell_price),4))
+                            # print('order_sell:',order_sell)
                             data["price_sell"].append(msg['c'])
                             data['price'] = msg['c']
                             print('sell:',data['price'])
@@ -116,13 +124,14 @@ def btc_trade_history(msg):
                     percent_buy = ((max_var-min_var)/min_var)*100
                     # print("percent buy:",percent_buy)
                     if percent_buy > 0.12:
-                        order_buy = client.order_limit_buy(symbol=data['symbol'],quantity=100,price='11')
-                        print('order_buy:',order_buy)
-                        data["price_buy"].append(msg['c'])
-                        print('buy:',float(msg['c']))
+                        buy_coin = round(data["price_play"]/msg['c'],4)
+                        print("buy_coin:",buy_coin)
+                        order_buy = client.order_market_buy(symbol=data['symbol'],quantity=buy_coin)
+                        coin_fee = msg['c']+(buy_coin*data['fee'])
+                        data["price_buy"].append(coin_fee)
+                        print('buy:',coin_fee)
                         data["price"] = float(msg['c'])
-                        data['price'] = msg['c']
-                        data['sell'] = msg['c']
+                        data['sell'] = coin_fee
                         data['sw'] = True
                     
         dict_data['last'] = msg['c']
