@@ -1,0 +1,5 @@
+pandas
+sqlitedict
+python-binance==1.0.15
+PyQt5
+matplotlib
