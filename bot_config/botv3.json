@@ -1,0 +1,12 @@
+{
+    "p_open":0,
+    "status":true,
+    "sell":0,
+    "sw":false,
+    "first":true,
+    "symbol":"ETHBUSD",
+    "starttime": "30 day ago UTC",
+    "interval":"1m",
+    "low_span":100,
+    "hight_span":200
+}

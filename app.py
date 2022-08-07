@@ -1,11 +1,12 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 from PyQt5 import QtWidgets
-from cypto import main, stop_service
+# from cypto import main, stop_service
+from main import main, stop_service
 
 class Windows(QMainWindow):
     def __init__(self):
-        super(Windows,self).__init__()
+        super(Windows,self).__init__() 
         # self.setGeometry(50, 50)
         self.setFixedSize(300, 100)
         self.setWindowTitle("crypto")
