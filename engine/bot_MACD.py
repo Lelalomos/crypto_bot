@@ -1,5 +1,5 @@
 import pandas as pd
-from utillity import calculate_signal
+from talib import MACD
 import cache_memory
 import re
 
@@ -8,12 +8,12 @@ class bot_MACD:
         self.df = df
         self.data = cache_memory.cache_manager(bot_name)
 
-    def buyORsell(self, MACD, signal):
+    def buyORsell(self, macd_var, signal_var):
         #     buy
-        if MACD.iloc[-1::].values[0]>signal.iloc[-1::].values[0]:
+        if macd_var[-1]>signal_var[-1]:
             return 0 #False
         #     sell
-        elif MACD.iloc[-1::].values[0]<signal.iloc[-1::].values[0]:
+        elif macd_var[-1]<signal_var[-1]:
             return 1 #True
         return 3
 
@@ -32,7 +32,7 @@ class bot_MACD:
                     
             if float(msg['k']['o']) != float(self.data.get_values('p_open')) or self.data.get_values('first'):
                 # calculate signal and MACD
-                macd, signal = calculate_signal(self.df)
+                macd, signal, _ = MACD(self.df['close'])
                 sORb = self.buyORsell(macd, signal)
 
                 # sell

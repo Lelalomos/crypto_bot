@@ -2,7 +2,12 @@ from binance.client import Client
 import os
 from binance import ThreadedWebsocketManager
 from utillity import read_config, get_close_history
-from bot_MACD import bot_MACD
+
+# bot version
+# from engine.bot_MACD import bot_MACD
+from engine.bot_EMA import bot_EMA
+
+
 import cache_memory
 
 api_key = os.environ.get('binance_api')
@@ -15,18 +20,21 @@ main_config = read_config(os.path.join(os.getcwd(),'main_config','main_config.js
 client = Client(api_key, api_secret)
 dict_data = {'error':False}
 bsm = ThreadedWebsocketManager()
-bot_name = "botv2"
+bot_name = "botv3"
 data = cache_memory.cache_manager(bot_name)
-data.init_data(os.path.join(os.getcwd(),'bot_config','botv2.json'))
+data.init_data(os.path.join(os.getcwd(),'bot_config',f'{bot_name}.json'))
 print('prepare data')
 df = get_close_history(client,data.get_all_data())
 print('finish')
-bot = bot_MACD(df, bot_name)
+bot = bot_EMA(df, bot_name)
 
 def btc_trade_history(msg):
     global bsm, bot
     if data.get_values('status') != True:
-        bsm.stop()
+        try:
+            bsm.stop()
+        except KeyError:
+            print('stopped')
 
     if msg['e'] != 'error':
         # read config

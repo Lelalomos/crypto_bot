@@ -18,7 +18,6 @@ data = {
     "first":True,
     "symbol":"ETHBUSD",
     "symbol_play": "ETH",
-    "back_price": np.array([]),
     "price_play":15,
     "fee": 0.0075
 }
@@ -30,10 +29,6 @@ def btc_trade_history(msg):
     global data,bsm
 
     if data['status'] != True:
-        print('save data')
-        with open("data.json", "w+") as outfile:
-            data['back_price'] = data['back_price'].tolist()
-            json.dump(data, outfile)
         bsm.stop()
         
     if msg['e'] != 'error':
