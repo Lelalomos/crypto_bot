@@ -4,7 +4,9 @@
 &nbsp;
 &nbsp;
 # PERPOSE
-  เพื่อพัฒนาตัว bot เพื่อใช้เรียนรู้การนำเอา algorithm มาใช้ในการเทรดค่าต่างๆมากขึ้น การพัฒนาอย่างนี้สามารถนำไปต่อยอดใช้กับ หุ้น forex หรือจะเป็นการคำนวณการซื้อขายกองทุนก็สามารถทำได้ 
+- For learn python program
+- For learn how to trade stock with algorithm
+- FOR RICH
 &nbsp;
 &nbsp;
 &nbsp;
@@ -12,9 +14,8 @@
 - EMA + stochastic(20,80)
 - MACD + stochastic(20,80)
 - LSTM
-- logging
-- การเก็บรายละเอียดของ bot ที่ต้องเปิดมาใช้งานได้ต่อเนื่องเมื่อทำการหยุดไปแล้ว
-- การเก็บข้อมูลที่เราซื้อ ขาย มาทำการ label เพื่อใช้ในการทำ model พัฒนาต่อไป
+- Logging
+- Save data for model learning
 - Docker image
 &nbsp;
 &nbsp;
@@ -23,5 +24,13 @@
 - engine name:
   - EMA
   - MACD
+&nbsp;
+&nbsp;
+&nbsp;
+# HOW TO USE
+- Install lib in requirement.txt
+- Add key binance in /config/key.json
+- Select engine in main_config/main_config.json
+- Run python app.py
 
 
