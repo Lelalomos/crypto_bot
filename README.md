@@ -9,7 +9,6 @@
 &nbsp;
 &nbsp;
 # IMPROVEMENT
-
 - EMA + stochastic(20,80)
 - MACD + stochastic(20,80)
 - LSTM
@@ -17,5 +16,12 @@
 - การเก็บรายละเอียดของ bot ที่ต้องเปิดมาใช้งานได้ต่อเนื่องเมื่อทำการหยุดไปแล้ว
 - การเก็บข้อมูลที่เราซื้อ ขาย มาทำการ label เพื่อใช้ในการทำ model พัฒนาต่อไป
 - Docker image
+&nbsp;
+&nbsp;
+&nbsp;
+# DOCUMENT 
+- engine name:
+  - EMA
+  - MACD
 
 

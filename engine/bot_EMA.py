@@ -27,7 +27,7 @@ class bot_EMA:
                 # state change 
                 print('state change:',self.data.get_values('p_open'))
                 self.df = self.df.iloc[1: , :]
-                df2 = pd.DataFrame([msg['k']["o"]],columns=['close'])
+                df2 = pd.DataFrame({'hight':float(msg['k']['h']), 'low':float(msg['k']['l']), 'close':float(msg['k']['c'])},index=[0])
                 self.df = pd.concat([self.df, df2], ignore_index = True, axis = 0)
 
             if float(msg['k']['o']) != float(self.data.get_values('p_open')) or self.data.get_values('first'):
@@ -43,13 +43,13 @@ class bot_EMA:
                     # check price sell>buy
                     if sORb:
                         split_price_buy = re.findall(r'\d+\.\d+|\d+',self.data.get_values('price_buy'))
-                        if float(msg['k']['o']) > float(split_price_buy[-1]):
+                        if float(msg['k']['c']) > float(split_price_buy[-1]):
                             # order_sell = client.order_market_sell(symbol=data['symbol'],quantity=round(float(sell_price),4))
                             # print('order_sell:',order_sell)
-                            self.data.update_sell(str(msg['k']['o']))
+                            self.data.update_sell(str(msg['k']['c']))
                             # save price sell
-                            self.data.update('price',msg['k']['o'])
-                            print('sell:',msg['k']['o'])
+                            self.data.update('price',msg['k']['c'])
+                            print('sell:',msg['k']['c'])
                             # change status sw to False
                             self.data.update('sw',False)
                             print('sw',self.data.get_values('sw'))
@@ -58,8 +58,8 @@ class bot_EMA:
                     # print('buy')
                     if not sORb:
                         # order_buy = client.order_market_buy(symbol=data['symbol'],quantity=buy_coin)
-                        self.data.update_buy(str(msg['k']['o']))
-                        print('buy:',msg['k']['o'])
+                        self.data.update_buy(str(msg['k']['c']))
+                        print('buy:',msg['k']['c'])
                         # data["price"] = float(msg['k']['c'])
                         self.data.update('sw',True)
                         print('sw',self.data.get_values('sw'))

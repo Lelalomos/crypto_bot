@@ -1,51 +1,54 @@
 from binance.client import Client
 import os
 from binance import ThreadedWebsocketManager
-from utillity import read_config, get_close_history
+from utillity import read_config, get_close_history, remove_file
 
-# bot version
-# from engine.bot_MACD import bot_MACD
+# bot
+from engine.bot_MACD import bot_MACD
+from engine.bot_EMA_STOCH import bot_EMA_STOCH
 from engine.bot_EMA import bot_EMA
-
 
 import cache_memory
 
-api_key = os.environ.get('binance_api')
-api_secret = os.environ.get('binance_secret')
-
-print('api_key:',api_key)
-print('api_secret:',api_secret)
-
+# load config
+keys = read_config(os.path.join(os.getcwd(),'config','key.json'))
 main_config = read_config(os.path.join(os.getcwd(),'main_config','main_config.json'))
-client = Client(api_key, api_secret)
+
+client = Client(keys["api_key"], keys['api_secret'])
 dict_data = {'error':False}
 bsm = ThreadedWebsocketManager()
-bot_name = "botv3"
+bot_name = main_config['engine']
 data = cache_memory.cache_manager(bot_name)
-data.init_data(os.path.join(os.getcwd(),'bot_config',f'{bot_name}.json'))
+data.init_data(os.path.join(os.getcwd(),'bot_config',f'bot_{bot_name}.json'))
+
 print('prepare data')
 df = get_close_history(client,data.get_all_data())
 print('finish')
-bot = bot_EMA(df, bot_name)
+
+bot = eval(f"bot_{bot_name}")(df, bot_name)
 
 def btc_trade_history(msg):
     global bsm, bot
-    if data.get_values('status') != True:
-        try:
-            bsm.stop()
-        except KeyError:
-            print('stopped')
 
     if msg['e'] != 'error':
-        # read config
-        bot.process(msg)
+        try:
+            bot.process(msg)
+        except Exception as e:
+            print('error engine:',e)
+            bsm.stop()
+
         dict_data['error'] = False
     else:
         dict_data['error'] = True
-        
+        bsm.stop()
 
+    if data.get_values('status') != True:
+        bsm.stop()
+        if main_config['end']['rmdata']:
+            data.clear_data()
+            remove_file(os.path.join(os.getcwd(),'cache',f'{bot_name}.sqlite'))
+        
 def stop_service():
-    data.clear_data()
     data.update('status',False)
 
 def main():

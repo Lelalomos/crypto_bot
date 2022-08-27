@@ -1,9 +1,11 @@
 from sqlitedict import SqliteDict
 from utillity import read_config
+import os
 
 class cache_manager:
     def __init__(self, database_name:str) -> None:
-        self.db = SqliteDict(f"{database_name}.sqlite")
+        os.makedirs(os.path.join(os.getcwd(),'cache'), exist_ok=True)
+        self.db = SqliteDict(os.path.join(os.getcwd(),'cache',f"{database_name}.sqlite"))
 
     def close(self) -> None:
         self.db.close()
