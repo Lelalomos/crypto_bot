@@ -4,3 +4,4 @@ python-binance==1.0.15
 PyQt5
 matplotlib
 TA-Lib
+opencv-python
