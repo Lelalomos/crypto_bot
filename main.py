@@ -7,6 +7,7 @@ from utillity import read_config, get_close_history, remove_file
 from engine.bot_MACD import bot_MACD
 from engine.bot_EMA_STOCH import bot_EMA_STOCH
 from engine.bot_EMA import bot_EMA
+from engine.bot_MACD_STOCH import bot_MACD_STOCH
 
 import cache_memory
 
@@ -50,6 +51,7 @@ def btc_trade_history(msg):
         
 def stop_service():
     data.update('status',False)
+    print('stop service')
 
 def main():
     bsm.start()

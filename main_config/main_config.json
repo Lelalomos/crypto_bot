@@ -1,5 +1,5 @@
 {
-    "engine": "EMA",
+    "engine": "MACD_STOCH",
     "end":{
         "rmdata": true
     }

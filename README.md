@@ -11,8 +11,7 @@
 &nbsp;
 &nbsp;
 # IMPROVEMENT
-- EMA + stochastic(20,80)
-- MACD + stochastic(20,80)
+- Plot graph (buy, sell, macd, stochastic)
 - LSTM
 - Logging
 - Save data for model learning
@@ -24,13 +23,15 @@
 - engine name:
   - EMA
   - MACD
+  - EMA_STOCH (ema + stochastic indicator)
+  - MACD_STOCH (macd + stochastic indicator)
 &nbsp;
 &nbsp;
 &nbsp;
 # HOW TO USE
 - Install lib in requirement.txt
-- Add key binance in /config/key.json
-- Select engine in main_config/main_config.json
+- Add key binance in /config/key.json 
+- Select engine in main_config/main_config.json ( you can see list of engine in document > engine name )
 - Run python app.py
 
 

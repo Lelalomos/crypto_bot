@@ -1,9 +1,9 @@
 import pandas as pd
-from talib.abstract import MACD
+from talib.abstract import MACD, STOCH
 import cache_memory
 import re
 
-class bot_MACD:
+class bot_MACD_STOCH:
     def __init__(self, df, bot_name):
         self.df = df
         self.data = cache_memory.cache_manager(bot_name)
@@ -34,12 +34,14 @@ class bot_MACD:
                 # calculate signal and MACD
                 macd, signal, _ = MACD(self.df['close'])
                 sORb = self.buyORsell(macd, signal)
+                slowk, slowd = STOCH(self.df['hight'], self.df['low'], self.df['close'])
 
                 # sell
                 if self.data.get_values('sw'):
                     # print('sell')
                     # check price sell>buy
-                    if sORb:
+                    hight_stoch = int(self.data.get_values('hight_stoch'))
+                    if sORb and slowk[-1] < slowd[-1] and slowk[-1] >= hight_stoch and slowd[-1] >= hight_stoch:
                         split_price_buy = re.findall(r'\d+\.\d+|\d+',self.data.get_values('price_buy'))
                         if float(msg['k']['c']) > float(split_price_buy[-1]):
                             # order_sell = client.order_market_sell(symbol=data['symbol'],quantity=round(float(sell_price),4))
@@ -54,7 +56,8 @@ class bot_MACD:
                 # buy
                 else:
                     # print('buy')
-                    if not sORb:
+                    low_stoch = int(self.data.get_values('low_stoch'))
+                    if not sORb and slowk[-1] > slowd[-1] and slowk[-1] <= low_stoch and slowd[-1] <= low_stoch:
                         # order_buy = client.order_market_buy(symbol=data['symbol'],quantity=buy_coin)
                         self.data.update_buy(str(msg['k']['c']))
                         print('buy:',msg['k']['c'])
