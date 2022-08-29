@@ -1,7 +1,7 @@
 import sys
 from PyQt5.Qt import QApplication, QClipboard
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QWidget, QPlainTextEdit,Qte
+from PyQt5.QtWidgets import QMainWindow, QWidget, QPlainTextEdit
 from PyQt5.QtCore import QSize
 
 class ExampleWindow(QMainWindow):
