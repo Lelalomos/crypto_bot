@@ -9,7 +9,13 @@ from engine.bot_EMA_STOCH import bot_EMA_STOCH
 from engine.bot_EMA import bot_EMA
 from engine.bot_MACD_STOCH import bot_MACD_STOCH
 
+# cache 
 import cache_memory
+
+# logging
+import logging
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # load config
 keys = read_config(os.path.join(os.getcwd(),'config','key.json'))
@@ -22,11 +28,11 @@ bot_name = main_config['engine']
 data = cache_memory.cache_manager(bot_name)
 data.init_data(os.path.join(os.getcwd(),'bot_config',f'bot_{bot_name}.json'))
 
-print('prepare data')
+logger.info('[PROCESS] PREPARE DATA')
 df = get_close_history(client,data.get_all_data())
-print('finish')
+logger.info('[DONE] PREPARE DATA')
 
-bot = eval(f"bot_{bot_name}")(df, bot_name)
+bot = eval(f"bot_{bot_name}")(df, bot_name, logger)
 
 def btc_trade_history(msg):
     global bsm, bot
@@ -34,14 +40,17 @@ def btc_trade_history(msg):
     if msg['e'] != 'error':
         try:
             bot.process(msg)
-        except Exception as e:
-            print('error engine:',e)
+        except Exception:
+            # print('error engine:',e)
+            logger.error('[ERROR] ERROR ENGINE PROCESS', exc_info=True)
             bsm.stop()
+            logger.info('[DONE] STOP ENGINE')
 
         dict_data['error'] = False
     else:
         dict_data['error'] = True
         bsm.stop()
+        logger.info('[DONE] STOP ENGINE')
 
     if data.get_values('status') != True:
         bsm.stop()
@@ -51,9 +60,10 @@ def btc_trade_history(msg):
         
 def stop_service():
     data.update('status',False)
-    print('stop service')
+    logger.info('[DONE] STOP ENGINE')
+    # print('stop service')
 
 def main():
     bsm.start()
-    print('starting ...... ')
+    logger.info('[INIT] START ENGINE')
     bsm.start_kline_futures_socket(callback=btc_trade_history, symbol=data.get_values("symbol"),interval=data.get_values("interval"))

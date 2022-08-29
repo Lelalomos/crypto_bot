@@ -4,8 +4,9 @@ import re
 from talib.abstract import EMA, STOCH
 
 class bot_EMA_STOCH:
-    def __init__(self, df, bot_name) -> None:
+    def __init__(self, df, bot_name, logger) -> None:
         self.df = df
+        self.logger = logger
         self.data = cache_memory.cache_manager(bot_name)
 
     def buyORsell(self, ema_low, ema_hight):
@@ -21,11 +22,11 @@ class bot_EMA_STOCH:
         if self.data.get_values('first'):
             self.data.update('first',False)
             self.data.update('p_open',msg['k']['o'])
-            print('p_open:',msg['k']['o'])
+            self.logger.info("[PROCESS] INIT PRICE %s",msg['k']['o'])
         else:
             if float(msg['k']['o']) != float(self.data.get_values('p_open')):
                 # state change 
-                print('state change:',self.data.get_values('p_open'))
+                self.logger.info("[PROCESS] PRICE CHANGE %s",self.data.get_values('p_open'))
                 self.df = self.df.iloc[1: , :]
                 df2 = pd.DataFrame({'hight':float(msg['k']['h']), 'low':float(msg['k']['l']), 'close':float(msg['k']['c'])},index=[0])
                 self.df = pd.concat([self.df, df2], ignore_index = True, axis = 0)
@@ -51,10 +52,10 @@ class bot_EMA_STOCH:
                             self.data.update_sell(str(msg['k']['c']))
                             # save price sell
                             self.data.update('price',msg['k']['c'])
-                            print('sell:',msg['k']['c'])
+                            self.logger.info('[DO] SELL: %s', msg['k']['c'])
                             # change status sw to False
                             self.data.update('sw',False)
-                            print('sw',self.data.get_values('sw'))
+                            # print('sw',self.data.get_values('sw'))
                 # buy
                 else:
                     # print('buy')
@@ -62,11 +63,11 @@ class bot_EMA_STOCH:
                     if not sORb and slowk[-1] > slowd[-1] and slowk[-1] <= low_stoch and slowd[-1] <= low_stoch:
                         # order_buy = client.order_market_buy(symbol=data['symbol'],quantity=buy_coin)
                         self.data.update_buy(str(msg['k']['c']))
-                        print('buy:',msg['k']['c'])
+                        self.logger.info('[DO] BUY: %s',msg['k']['c'])
                         # data["price"] = float(msg['k']['c'])
                         self.data.update('sw',True)
-                        print('sw',self.data.get_values('sw'))
+                        # print('sw',self.data.get_values('sw'))
                         
                 # change value
                 self.data.update('p_open',msg['k']['o'])
-                print('changed:',self.data.get_values('p_open'))
+                # print('changed:',self.data.get_values('p_open'))

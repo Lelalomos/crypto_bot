@@ -13,7 +13,6 @@
 # IMPROVEMENT
 - Plot graph (buy, sell, macd, stochastic)
 - LSTM
-- Logging
 - Save data for model learning
 - Docker image
 &nbsp;
