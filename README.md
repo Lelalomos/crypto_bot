@@ -11,9 +11,7 @@
 &nbsp;
 &nbsp;
 # IMPROVEMENT
-- Ichimoku Cloud + EMA
-- Ichimoku Cloud + MACD
-- Ichimoku Cloud (Single)
+- Ichimoku Cloud + EMA + MACD (vote)
 - Plot graph (buy, sell, macd, stochastic)
 - LSTM
 - Save data for model learning
@@ -27,6 +25,7 @@
   - MACD
   - EMA_STOCH (ema + stochastic indicator)
   - MACD_STOCH (macd + stochastic indicator)
+  - ichimoku
 &nbsp;
 &nbsp;
 &nbsp;

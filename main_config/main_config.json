@@ -1,6 +1,6 @@
 {
-    "engine": "MACD_STOCH",
+    "engine": "ichimoku",
     "end":{
-        "rmdata": true
+        "rmdata": false
     }
 }

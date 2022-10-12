@@ -8,6 +8,7 @@ from engine.bot_MACD import bot_MACD
 from engine.bot_EMA_STOCH import bot_EMA_STOCH
 from engine.bot_EMA import bot_EMA
 from engine.bot_MACD_STOCH import bot_MACD_STOCH
+from engine.bot_ichimoku import bot_ichimoku
 
 # cache 
 import cache_memory

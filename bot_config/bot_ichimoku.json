@@ -1,0 +1,15 @@
+{
+    "p_open":0,
+    "status":true,
+    "sell":0,
+    "sw":false,
+    "first":true,
+    "symbol":"BTCBUSD",
+    "starttime": "2 day ago UTC",
+    "interval":"1m",
+    "tenkansen": 9,
+    "kinjunsen": 26,
+    "shift": 26,
+    "senkou_b": 52,
+    "price_play": 10
+}
