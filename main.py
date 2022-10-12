@@ -29,11 +29,15 @@ bot_name = main_config['engine']
 data = cache_memory.cache_manager(bot_name)
 data.init_data(os.path.join(os.getcwd(),'bot_config',f'bot_{bot_name}.json'))
 
+# save price
+cprice = client.get_asset_balance(asset=data.get_values('symbol_stable'))
+data.update('price_original',cprice)
+
 logger.info('[PROCESS] PREPARE DATA')
 df = get_close_history(client,data.get_all_data())
 logger.info('[DONE] PREPARE DATA')
 
-bot = eval(f"bot_{bot_name}")(df, bot_name, logger)
+bot = eval(f"bot_{bot_name}")(df, bot_name, logger, client)
 
 def btc_trade_history(msg):
     global bsm, bot
@@ -63,6 +67,16 @@ def stop_service():
     data.update('status',False)
     logger.info('[DONE] STOP ENGINE')
     # print('stop service')
+
+def buy():
+    pprice = data.get_values('price_play')
+    if float(pprice) >= float(client.get_asset_balance(asset='BUSD')):
+        logger.info('[PROCESS] PRICE: %s', pprice)
+        order_buy = client.order_market_buy(symbol='BTCBUSD', quoteOrderQty=10)
+        logger.info('[DONE] CURRENT PRICE %s', client.get_asset_balance(asset='BUSD'))
+        logger.info('[DONE] INFORMATION %s', order_buy)
+    else:
+        logger.info('[FAIL] PRICE NOT ENOUGH')
 
 def main():
     bsm.start()

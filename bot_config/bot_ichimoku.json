@@ -5,11 +5,14 @@
     "sw":false,
     "first":true,
     "symbol":"BTCBUSD",
+    "symbol_stable": "BUSD",
     "starttime": "2 day ago UTC",
     "interval":"1m",
     "tenkansen": 9,
     "kinjunsen": 26,
     "shift": 26,
     "senkou_b": 52,
-    "price_play": 10
+    "price_play": 10,
+    "price_original":0,
+    "accept2play":false
 }

@@ -4,7 +4,11 @@
     "sw":false,
     "first":true,
     "symbol":"ETHBUSD",
+    "symbol_stable": "BUSD",
     "starttime": "30 day ago UTC",
     "interval":"1m",
-    "status":true
+    "status":true,
+    "price_play": 10,
+    "price_original":0,
+    "accept2play":false
 }

@@ -7,5 +7,6 @@
     "symbol":"ETHBUSD",
     "symbol_play": "ETH",
     "price_play":15,
-    "fee": 0.0075
+    "fee": 0.0075,
+    "price_play": 10
 }

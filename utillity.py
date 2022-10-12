@@ -61,6 +61,48 @@ def ichimoku_cloud(df,tenkansen_value = 9, kinjunsen_value = 26, shift_value = 2
         df['cloud_red_line_b'] = senkou_span_b
         return df
 
+def buy(price_play, logger, client, symbol_v, symbol_stable):
+    """ _summary_
+
+    Args:
+        price_play (str): price for buy
+        logger (logging): logging variable for log process
+        client (client): client variable for connect binance host
+
+    """
+ 
+    if float(price_play) >= float(client.get_asset_balance(asset=symbol_stable)):
+        logger.info('[PROCESS] BUY PRICE: %s', price_play)
+        order_buy = client.order_market_buy(symbol=symbol_v, quoteOrderQty=price_play)
+        logger.info('[DONE] CURRENT PRICE %s', client.get_asset_balance(asset=symbol_stable))
+        logger.info('[DONE] INFORMATION %s', order_buy)
+    else:
+        logger.info('[FAIL] PRICE NOT ENOUGH')
+
+
+def sell(price_original, price_sell, close_price, logger, client, symbol_v, symbol_stable):
+    """ _summary_
+
+    Args:
+        price_original (str): free value of crypto (get value from price_original key in config)
+        price_sell (str): free value of crypto (get current value of crypto)
+        close_price (str): close price
+        logger (logging): logging variable for log process
+        client (client): client variable for connect binance host
+        symbol_v (str): symbol for sell --> BTCBUSD
+        symbol_stable (str): symbol for get price --> BUSD
+
+    """
+
+    price_original = float(price_original)
+    price_sell = float(price_sell)
+    close_price = float(close_price)
+    sell_price = (max(price_original,price_sell) - min(price_original,price_sell))*close_price
+    logger.info('[PROCESS] SELL PRICE: %s', sell_price)
+    order_sell = client.order_market_sell(symbol=symbol_v, quoteOrderQty= str(sell_price))
+    logger.info('[DONE] CURRENT PRICE %s', client.get_asset_balance(asset=symbol_stable))
+    logger.info('[DONE] INFORMATION %s', order_sell)
+
 
 def read_config(path_json):
     """

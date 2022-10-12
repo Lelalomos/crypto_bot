@@ -4,9 +4,13 @@
     "sell":0,
     "sw":false,
     "first":true,
-    "symbol":"ETHBUSD",
+    "symbol":"BTCBUSD",
+    "symbol_stable": "BUSD",
     "starttime": "30 day ago UTC",
     "interval":"1m",
-    "low_span":100,
-    "hight_span":200
+    "low_span":150,
+    "hight_span":155,
+    "price_play": 10,
+    "price_original":0,
+    "accept2play":false
 }

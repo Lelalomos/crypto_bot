@@ -1,12 +1,13 @@
 import pandas as pd
 import cache_memory
 import re
-from utillity import ichimoku_cloud
+from utillity import ichimoku_cloud, buy, sell
 
 class bot_ichimoku:
-    def __init__(self, df, bot_name, logger) -> None:
+    def __init__(self, df, bot_name, logger, client) -> None:
         self.df = df
         self.logger = logger
+        self.client = client
         self.data = cache_memory.cache_manager(bot_name)
 
     def buyORsell(self):
@@ -54,8 +55,10 @@ class bot_ichimoku:
                     if sORb:
                         split_price_buy = re.findall(r'\d+\.\d+|\d+',self.data.get_values('price_buy'))
                         if float(msg['k']['c']) > float(split_price_buy[-1]):
-                            # order_sell = client.order_market_sell(symbol=data['symbol'],quantity=round(float(sell_price),4))
-                            # print('order_sell:',order_sell)
+                            
+                            if self.data.get_values('accept2play'):
+                                sell(self.data.get_values('price_original'), self.client.get_asset_balance(asset=self.data.get_values('symbol_stable')), msg['k']['c'], self.logger, self.client, self.data.get_values('symbol'), self.data.get_values('symbol_stable'))
+
                             self.data.update_sell(str(msg['k']['c']))
                             # save price sell
                             self.data.update('price',msg['k']['c'])
@@ -67,7 +70,10 @@ class bot_ichimoku:
                 else:
                     # print('buy')
                     if not sORb:
-                        # order_buy = client.order_market_buy(symbol=data['symbol'],quantity=buy_coin)
+
+                        if self.data.get_values('accept2play'):
+                            buy(self.data.get_values('price_play'), self.logger, self.client, self.data.get_values('symbol'),self.data.get_values('symbol_stable'))
+
                         self.data.update_buy(str(msg['k']['c']))
                         self.logger.info('[DO] BUY: %s',msg['k']['c'])
                         # data["price"] = float(msg['k']['c'])

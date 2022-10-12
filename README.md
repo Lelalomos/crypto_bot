@@ -29,6 +29,18 @@
 &nbsp;
 &nbsp;
 &nbsp;
+# CONFIG PARAMS EXPLANATION
+- price_play --> price for buy crypto
+- accept2play --> allow to pay
+- symbol_stable --> stablecoin such as BUSD, USDT
+&nbsp;
+- Technical indicator params (bot_config):
+  - EMA --> low_span, hight_span
+  - EMA_STOCH --> low_span, hight_span, hight_stoch, low_stoch
+  - ichimoku --> tenkansen, kinjunsen, shift, senkou_b 
+&nbsp;
+&nbsp;
+&nbsp;
 # HOW TO USE
 - Install lib in requirement.txt
 - Add key binance in /config/key.json 
